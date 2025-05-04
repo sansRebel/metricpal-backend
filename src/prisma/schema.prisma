@@ -14,9 +14,24 @@ datasource db {
 }
 
 model User {
-  id        String   @id @default(uuid())
-  email     String   @unique
-  name      String
-  createdAt DateTime @default(now())
+  id           String   @id @default(uuid())
+  name         String
+  email        String   @unique
+  password     String   // Hashed password
+  role         Role     @default(USER)
+  createdAt    DateTime @default(now())
+  organization Organization @relation(fields: [organizationId], references: [id])
+  organizationId String
 }
 
+model Organization {
+  id        String   @id @default(uuid())
+  name      String
+  createdAt DateTime @default(now())
+  users     User[]
+}
+
+enum Role {
+  ADMIN
+  USER
+}
